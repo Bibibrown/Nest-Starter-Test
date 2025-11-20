@@ -1,0 +1,57 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Book {
+  id: ID!
+  name: String
+  description: String
+  price: Float
+  writer: [String!]
+}
+
+type User {
+  _id: String!
+  name: String!
+  email: String!
+  password: String!
+  address: String!
+}
+
+type Query {
+  getHello: String!
+  getBook: Book!
+  users: [User!]!
+
+  """Get a user by its ID"""
+  userById(id: String!): User!
+}
+
+type Mutation {
+  createBook(input: InputBook!): Book!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Int!): User!
+}
+
+input InputBook {
+  name: String!
+  price: Float
+  description: String
+  writer: [String!]!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+  password: String!
+  address: String!
+}
+
+input UpdateUserInput {
+  name: String
+  email: String
+  password: String
+  address: String
+  _id: String!
+}
