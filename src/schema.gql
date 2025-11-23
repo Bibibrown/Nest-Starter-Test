@@ -2,14 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Book {
-  id: ID!
-  name: String
-  description: String
-  price: Float
-  writer: [String!]
-}
-
 type User {
   _id: String!
   name: String!
@@ -18,27 +10,30 @@ type User {
   address: String!
 }
 
+type BookEntity {
+  _id: ID!
+  title: String!
+  author: String!
+  publishedYear: Int!
+}
+
 type Query {
   getHello: String!
-  getBook: Book!
   users: [User!]!
 
   """Get a user by its ID"""
   userById(id: String!): User!
+  books: [BookEntity!]!
+  book(id: String!): BookEntity!
 }
 
 type Mutation {
-  createBook(input: InputBook!): Book!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
-}
-
-input InputBook {
-  name: String!
-  price: Float
-  description: String
-  writer: [String!]!
+  createBook(createBookInput: CreateBookInput!): BookEntity!
+  updateBook(updateBookInput: UpdateBookInput!): BookEntity!
+  removeBook(id: String!): BookEntity!
 }
 
 input CreateUserInput {
@@ -54,4 +49,17 @@ input UpdateUserInput {
   password: String
   address: String
   _id: String!
+}
+
+input CreateBookInput {
+  title: String!
+  author: String!
+  publishedYear: Int!
+}
+
+input UpdateBookInput {
+  title: String
+  author: String
+  publishedYear: Int
+  _id: ID!
 }

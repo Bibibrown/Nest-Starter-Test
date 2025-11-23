@@ -1,25 +1,35 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql'
-import { Book } from './models/book.model'
-import { InputBook } from './dto/book.input'
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { BookService } from './book.service';
+import { BookEntity } from './entities/book.entity'; 
+import { CreateBookInput } from './dto/create-book.input';
+import { UpdateBookInput } from './dto/update-book.input';
 
-@Resolver('Book')
+@Resolver(() => BookEntity)
 export class BookResolver {
-  @Query(returns => Book)
-  getBook(): Book {
-    const result: Book = {
-      id: '1',
-      name: 'BeforeSecond',
-      price: 199,
-    }
-    return result
+  constructor(private readonly bookService: BookService) {}
+
+  @Mutation(() => BookEntity)
+  createBook(@Args('createBookInput') createBookInput: CreateBookInput) {
+    return this.bookService.create(createBookInput);
   }
 
-  @Mutation(returns => Book)
-  createBook(@Args('input') input: InputBook): Book {
-    const result: Book = {
-      id: '2',
-      ...input,
-    }
-    return result
+  @Query(() => [BookEntity], { name: 'books' })
+  findAll() {
+    return this.bookService.findAll();
+  }
+
+  @Query(() => BookEntity, { name: 'book' })
+  findOne(@Args('id', { type: () => String }) id: string) {
+    return this.bookService.findOne(id);
+  }
+
+  @Mutation(() => BookEntity)
+  updateBook(@Args('updateBookInput') updateBookInput: UpdateBookInput) {
+    return this.bookService.update(updateBookInput._id, updateBookInput);
+  }
+
+  @Mutation(() => BookEntity)
+  removeBook(@Args('id', { type: () => String }) id: string) {
+    return this.bookService.remove(id);
   }
 }
