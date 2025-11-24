@@ -27,19 +27,22 @@ import * as redisStore from 'cache-manager-ioredis';
         uri: configService.get<string>('DATABASE_URL'),
       }),
     }),
-    CacheModule.register({
+    CacheModule.registerAsync({
       isGlobal: true,
-      store: redisStore as any,
-      host: 'localhost',
-      port: 6379,
-      ttl: 60 * 60, // 1 hour
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        store: redisStore as any,
+        host: config.get('REDIS_HOST'),
+        port: config.get('REDIS_PORT'),
+        ttl: config.get('REDIS_TTL'),
+      }),
     }),
     ConfigModule.forRoot({
       cache: true,
     }),
     BookModule,
   ],
-  controllers: [],
   providers: [AppService, AppResolver],
 })
 export class AppModule {}
